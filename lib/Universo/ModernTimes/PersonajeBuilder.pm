@@ -39,7 +39,11 @@ our $actual;
         my $self = shift;
         my $hash = {};
         $hash->{color} = [shuffle(qw(moroch[a|o] rubi[a|o] castañ[a|o] castañ[a|o] peliroj[a|o]))]->[0];
+        $hash->{largo} = [shuffle(qw(corto melena largo))]->[0];
+        $hash->{forma} = [shuffle(qw(lacio ondulado enrulado))]->[0];
         $self->personaje->pelo_color($hash->{color});
+        $self->personaje->pelo_largo($hash->{largo});
+        $self->personaje->pelo_forma($hash->{forma});
     }
 
     sub asignar_nombre {

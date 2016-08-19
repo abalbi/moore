@@ -13,6 +13,8 @@ use List::MoreUtils qw(zip);
         push @{$self->{_atributos}}, { nombre => 'nombre'   };
         push @{$self->{_atributos}}, { nombre => 'edad'   };
         push @{$self->{_atributos}}, { nombre => 'pelo_color'   };
+        push @{$self->{_atributos}}, { nombre => 'pelo_largo'   };
+        push @{$self->{_atributos}}, { nombre => 'pelo_forma'   };
         push @{$self->{_atributos}}, map { {nombre => $_, validos => [1..5], tags => [$_, qw(virtue)]} } qw(conviction instinct courage);
         push @{$self->{_atributos}}, map { {nombre => $_, validos => [1..5], tags => [$_, qw(attribute, physical)]} } qw(strengh dexterity stamina);
         push @{$self->{_atributos}}, map { {nombre => $_, validos => [1..5], tags => [$_, qw(attribute, social)]} } qw(manipulation appearance charisma);
@@ -34,7 +36,9 @@ use List::MoreUtils qw(zip);
         $str .= sprintf " de %d", $personaje->edad;
         $str .= sprintf ".";
         $str .= sprintf " Es de una belleza %s", {1 => 'pobre', 2 => 'normal', 3 => 'buena', 4 => 'excepcional', 5 => 'deslumbrante'}->{$personaje->appearance};
+        $str .= sprintf ".";
         $str .= sprintf " Es %s", Moore->t($personaje, $personaje->pelo_color);
+        $str .= sprintf " y llega el pelo %s %s", Moore->t($personaje, $personaje->pelo_largo), Moore->t($personaje, $personaje->pelo_forma);
         return $str;
     }
 

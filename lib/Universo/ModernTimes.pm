@@ -15,7 +15,18 @@ use List::MoreUtils qw(zip);
         push @{$self->{_atributos}}, { nombre => 'pelo_color'   };
         push @{$self->{_atributos}}, { nombre => 'pelo_largo'   };
         push @{$self->{_atributos}}, { nombre => 'pelo_forma'   };
-        push @{$self->{_atributos}}, map { {nombre => $_, validos => [1..5], tags => [$_, qw(virtue)]} } qw(conviction instinct courage);
+        push @{$self->{_atributos}}, map { 
+            {
+                nombre => $_,
+                validos => [1..5],
+                tags => [$_, qw(virtue)],
+                descripciones => 
+                    $_ eq 'conviction' ? {1 => 'estable', 2 => 'determinad[a|o]', 3 => 'impulsiv[a|o]', 4 => 'brutal', 5 => 'completamente segur[a|o]'} :
+                    $_ eq 'instinct' ? {1 => 'intuitiv[a|o]', 2 => 'feral', 3 => 'bestial', 4 => 'visceral', 5 => 'primari[a|o]'} :
+                    {1 => 'cobarde', 2 => 'precavid[a|o]', 3 => 'brav[a|o]', 4 => 'resuelt[a|o]', 5 => 'heroic[a|o]'}
+
+            } 
+        } qw(conviction instinct courage);
         push @{$self->{_atributos}}, map { {nombre => $_, validos => [1..5], tags => [$_, qw(attribute, physical)]} } qw(strengh dexterity stamina);
         push @{$self->{_atributos}}, map { {nombre => $_, validos => [1..5], tags => [$_, qw(attribute, social)]} } qw(manipulation appearance charisma);
         push @{$self->{_atributos}}, map { {nombre => $_, validos => [1..5], tags => [$_, qw(attribute, mental)]} } qw(intelligence perception wits);
@@ -38,7 +49,20 @@ use List::MoreUtils qw(zip);
         $str .= sprintf " Es de una belleza %s", {1 => 'pobre', 2 => 'normal', 3 => 'buena', 4 => 'excepcional', 5 => 'deslumbrante'}->{$personaje->appearance};
         $str .= sprintf ".";
         $str .= sprintf " Es %s", Moore->t($personaje, $personaje->pelo_color);
-        $str .= sprintf " y llega el pelo %s %s", Moore->t($personaje, $personaje->pelo_largo), Moore->t($personaje, $personaje->pelo_forma);
+        $str .= sprintf " y lleva el pelo %s %s", Moore->t($personaje, $personaje->pelo_forma), Moore->t($personaje, $personaje->pelo_largo);
+        $str .= sprintf ".";
+        $str .= sprintf " Es %s(conviction:%s)", 
+            Moore->t($personaje, Moore->t($personaje, Universo::actual->atributo('conviction')->{descripciones}->{$personaje->conviction})),
+            $personaje->conviction
+        ;
+        $str .= sprintf ", %s(instinct:%s)", 
+            Universo::actual->atributo('instinct')->{descripciones}->{$personaje->instinct},
+            $personaje->instinct
+        ;
+        $str .= sprintf " y %s(courage:%s)", 
+            Moore->t($personaje, Universo::actual->atributo('courage')->{descripciones}->{$personaje->courage}),
+            $personaje->courage
+        ;
         return $str;
     }
 

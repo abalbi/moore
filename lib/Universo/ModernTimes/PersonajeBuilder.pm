@@ -39,7 +39,7 @@ our $actual;
         my $self = shift;
         my $hash = {};
         $hash->{color} = [shuffle(qw(moroch[a|o] rubi[a|o] castañ[a|o] castañ[a|o] peliroj[a|o]))]->[0];
-        $hash->{largo} = [shuffle(qw(corto melena largo))]->[0];
+        $hash->{largo} = [shuffle(qw(corto en_melena largo))]->[0];
         $hash->{forma} = [shuffle(qw(lacio ondulado enrulado))]->[0];
         $self->personaje->pelo_color($hash->{color});
         $self->personaje->pelo_largo($hash->{largo});
@@ -67,7 +67,7 @@ our $actual;
 
         my $estructura = $self->estructura($categoria, $tags, $puntos);
 
-        foreach my $tag (keys %$estructura) {
+        foreach my $tag (sort keys %$estructura) {
             $self->asignar_tag_random($estructura->{$tag}->{puntos_asignados}, $tag);
         }
     }
@@ -144,10 +144,10 @@ our $actual;
         my $puntos = shift;
         my $hash = {};
         map {$hash->{$_} = 0} @{$puntos};
-        foreach my $tag (keys %$estructura) {
+        foreach my $tag (sort keys %$estructura) {
             map {$hash->{$_} = 1} @{$estructura->{$tag}->{posibles_puntos}};
         }
-        if(scalar(grep {$hash->{$_} == 1} keys {%$hash}) != scalar @$puntos) {
+        if(scalar(grep {$hash->{$_} == 1} sort keys {%$hash}) != scalar @$puntos) {
             my $msg = join('', 'No se puede distribuir [', join(' ', @$puntos), '] para el personaje: ', $self->personaje->json);
             $Moore::logger->error($msg);
             die $msg;
@@ -170,7 +170,7 @@ our $actual;
         my $puntos = shift;
         my $filtrados = shift;
         while (1) {
-            $atributos = [shuffle(@{$atributos})];
+            $atributos = [Moore->mezclar(@{$atributos})];
             my $atributo = $atributos->[0];
             my $nombre = $atributo->{nombre};
             next if grep {$_ eq $nombre} @{$filtrados};

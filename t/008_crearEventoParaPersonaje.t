@@ -6,6 +6,6 @@ use Moore;
 
 my $universo = Universo::ModernTimes->new;
 
-my $personaje = $universo->fabricar('Personaje', { sexo=>'f'});
+my $personaje = $universo->fabricar('Personaje');
 
 print $personaje->descripcion;

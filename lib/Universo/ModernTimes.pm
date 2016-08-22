@@ -52,11 +52,11 @@ use List::MoreUtils qw(zip);
         $str .= sprintf " y lleva el pelo %s %s", Moore->t($personaje, $personaje->pelo_forma), Moore->t($personaje, $personaje->pelo_largo);
         $str .= sprintf ".";
         $str .= sprintf " Es %s(conviction:%s)", 
-            Moore->t($personaje, Moore->t($personaje, Universo::actual->atributo('conviction')->{descripciones}->{$personaje->conviction})),
+            Moore->t($personaje, Universo::actual->atributo('conviction')->{descripciones}->{$personaje->conviction}),
             $personaje->conviction
         ;
         $str .= sprintf ", %s(instinct:%s)", 
-            Universo::actual->atributo('instinct')->{descripciones}->{$personaje->instinct},
+            Moore->t($personaje, Universo::actual->atributo('instinct')->{descripciones}->{$personaje->instinct}),
             $personaje->instinct
         ;
         $str .= sprintf " y %s(courage:%s)", 

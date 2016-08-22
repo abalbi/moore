@@ -26,12 +26,12 @@ sub t {
     my $personaje = shift;
     my $string = shift;
     my $resultado = $string;
-    $Moore::logger->debug($resultado);
     $resultado =~ s/\[(.+)\]//;
     my @letras = split(/\|/, $1) if $1;
     $resultado = $resultado . $letras[0] if $letras[0] && $personaje->sexo eq 'f';
     $resultado = $resultado . $letras[1] if $letras[1] && $personaje->sexo eq 'm';
     $resultado =~ s/_/ /gi;
+    $Moore::logger->trace('t: ',$string, ' -> ', $resultado);
     return $resultado;
 }
 

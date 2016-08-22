@@ -1,7 +1,6 @@
 package Universo::ModernTimes::PersonajeBuilder;
 use strict;
 use Data::Dumper;
-use List::Util qw(shuffle);
 use fields qw(_personaje);
 
 our $actual;
@@ -38,12 +37,12 @@ our $actual;
     sub asignar_detalles {
         my $self = shift;
         my $hash = {};
-        $hash->{color} = [shuffle(qw(moroch[a|o] rubi[a|o] castañ[a|o] castañ[a|o] peliroj[a|o]))]->[0];
-        $hash->{largo} = [shuffle(qw(corto en_melena largo))]->[0];
-        $hash->{forma} = [shuffle(qw(lacio ondulado enrulado))]->[0];
-        $self->personaje->pelo_color($hash->{color});
-        $self->personaje->pelo_largo($hash->{largo});
-        $self->personaje->pelo_forma($hash->{forma});
+        $hash->{color} = [qw(moroch[a|o] rubi[a|o] castañ[a|o] castañ[a|o] peliroj[a|o])];
+        $hash->{largo} = [qw(corto en_melena largo)];
+        $hash->{forma} = [qw(lacio ondulado enrulado)];
+        $self->personaje->pelo_color($hash->{color}->[int rand scalar @{$hash->{color}}]);
+        $self->personaje->pelo_largo($hash->{largo}->[int rand scalar @{$hash->{largo}}]);
+        $self->personaje->pelo_forma($hash->{forma}->[int rand scalar @{$hash->{forma}}]);
     }
 
     sub asignar_nombre {
@@ -66,7 +65,6 @@ our $actual;
         my $puntos = shift;
 
         my $estructura = $self->estructura($categoria, $tags, $puntos);
-        $Moore::logger->debug( join (',', keys %$estructura) );
         foreach my $tag (sort keys %$estructura) {
             $self->asignar_tag_random($estructura->{$tag}->{puntos_asignados}, $tag);
         }
@@ -90,7 +88,14 @@ our $actual;
             my $nombre = $atributo->{nombre};
             if(defined $self->personaje->$nombre) {
                 push @{$filtrados}, $atributo->{nombre};
-                $Moore::logger->trace("Se filtra el atributo ", $nombre, " para el personaje ", $self->personaje->nombre, " por que tiene el valor fijado en ",$self->personaje->$nombre);
+                $Moore::logger->trace(
+                  "Se filtra el atributo ",
+                  $nombre,
+                  " para el personaje ",
+                  $self->personaje->nombre ? $self->personaje->nombre : 'NONAME',
+                  " por que tiene el valor fijado en ", 
+                  $self->personaje->nombre ? $self->personaje->nombre : 'NONAME',
+                );
             }
             if($atributo->{validos}->[0]) {
                 $self->personaje->$nombre($atributo->{validos}->[0]) if !$self->personaje->$nombre;
@@ -140,26 +145,25 @@ our $actual;
         my $self = shift;
         my $estructura = shift;
         my $puntos = shift;
-        my $puntos_tmp = [@{$puntos}];
-        foreach my $value (sort {$b->{min} <=> $a->{min}} values %$estructura) {
-            my $tag = $value->{tag};
-            my $c = 0;
-            while(1) {
-                $c++;
-                my $puntos_a_asignar = $puntos_tmp->[int rand scalar @$puntos_tmp];
-                last if !$puntos_a_asignar;
-                die "Se corto el ciclo por demasiadas iteraciones. " if $c == 15;
-                my $boo = 0;
-                foreach my $posibles_puntos (@{$estructura->{$tag}->{posibles_puntos}}) {
-                  $boo = 1 if $posibles_puntos == $puntos_a_asignar;
-                  last if $boo;
-                }
-                next if !$boo;
-                $estructura->{$tag}->{puntos_asignados} = shift(@{$puntos_tmp});
-                $Moore::logger->trace("Se asigno ", $estructura->{$tag}->{puntos_asignados}, " para ", $tag, " para el personaje ", $self->personaje->nombre);
-                last;
-            }
+        my $puntos_tmp = [sort {$a <=> $b} @{$puntos}];
+        my $tag_asignados = [];
+        while (1) {
+          my $puntos_a_asignar = shift @$puntos_tmp;
+          my $posibles_tags = [];
+          foreach my $tag (keys %$estructura) {
+            next if scalar grep {$tag eq $_} @$tag_asignados;
+            my $posibles = $estructura->{$tag}->{posibles_puntos};
+            push @{$posibles_tags}, $tag if scalar grep {$_ == $puntos_a_asignar} @$posibles;
+            #$Moore::logger->debug(Dumper { tag => $tag, posibles_tags => $posibles_tags, tag_asignados => $tag_asignados, puntos_a_asignar => $puntos_a_asignar, posibles => $posibles});
+          }
+          my $tag = $posibles_tags->[int rand scalar @$posibles_tags];
+          $estructura->{$tag}->{puntos_asignados} = $puntos_a_asignar;
+          push @$tag_asignados, $tag;
+          $Moore::logger->trace("Se asigno ", $estructura->{$tag}->{puntos_asignados}, " para ", $tag, " para el personaje ", $self->personaje->nombre?$self->personaje->nombre:'NONAME');
+          next if scalar @$puntos_tmp;
+          last;
         }
+        return;
     }
 
     sub estructura_tag {

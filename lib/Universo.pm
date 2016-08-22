@@ -2,7 +2,7 @@ package Universo;
 
 use strict;
 use Data::Dumper;
-use fields qw(_atributos _builder);
+use fields qw(_atributos _personaje_builder _eventos _evento_builder);
 
 our $actual;
 
@@ -34,6 +34,12 @@ our $actual;
 		return $self->{_atributos};
 	}
 
+	sub eventos {
+		my $self = shift;
+		return $self->{_eventos};
+	}
+
+
 	sub atributo {
 		my $self = shift;
 		my $tag = shift;
@@ -45,11 +51,30 @@ our $actual;
 		return $arr;
 	}
 
-	sub builder {
+	sub evento {
+		my $self = shift;
+		my $tag = shift;
+		my $arr = [];
+		foreach my $evento (@{$self->{_eventos}}) {
+			push @$arr, $evento if grep {$_ eq $tag} @{$evento->{tags}};
+		}
+		return $arr->[0] if scalar(@$arr) == 1;
+		return $arr;
+	}
+
+
+	sub personaje_builder {
 		my $self = shift;
 		my $builder = shift;
-		$self->{_builder} = $builder if defined $builder;
-		return $self->{_builder};
+		$self->{_personaje_builder} = $builder if defined $builder;
+		return $self->{_personaje_builder};
+	}
+
+	sub evento_builder {
+		my $self = shift;
+		my $builder = shift;
+		$self->{_evento_builder} = $builder if defined $builder;
+		return $self->{_evento_builder};
 	}
 
 	sub atributos_nombres {

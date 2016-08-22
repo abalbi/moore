@@ -12,6 +12,7 @@ srand($Moore::semilla);
 
 use Entorno;
 use Personaje;
+use Evento;
 use Universo;
 use Universo::ModernTimes;
 

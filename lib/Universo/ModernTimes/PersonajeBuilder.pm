@@ -21,7 +21,7 @@ our $actual;
 
         $self->asignar_nombre;
 
-        $self->personaje->edad(int(rand(25)) + 15);
+        $self->personaje->edad(int(rand(25)) + 15) if !$self->personaje->edad;
 
         $self->asignar_detalles;
 
@@ -40,9 +40,9 @@ our $actual;
         $hash->{color} = [qw(moroch[a|o] rubi[a|o] castañ[a|o] castañ[a|o] peliroj[a|o])];
         $hash->{largo} = [qw(corto en_melena largo)];
         $hash->{forma} = [qw(lacio ondulado enrulado)];
-        $self->personaje->pelo_color($hash->{color}->[int rand scalar @{$hash->{color}}]);
-        $self->personaje->pelo_largo($hash->{largo}->[int rand scalar @{$hash->{largo}}]);
-        $self->personaje->pelo_forma($hash->{forma}->[int rand scalar @{$hash->{forma}}]);
+        $self->personaje->pelo_color($hash->{color}->[int rand scalar @{$hash->{color}}]) if !$self->personaje->pelo_color;
+        $self->personaje->pelo_largo($hash->{largo}->[int rand scalar @{$hash->{largo}}]) if !$self->personaje->pelo_largo;
+        $self->personaje->pelo_forma($hash->{forma}->[int rand scalar @{$hash->{forma}}]) if !$self->personaje->pelo_forma;
     }
 
     sub asignar_nombre {
@@ -150,7 +150,7 @@ our $actual;
         while (1) {
           my $puntos_a_asignar = shift @$puntos_tmp;
           my $posibles_tags = [];
-          foreach my $tag (keys %$estructura) {
+          foreach my $tag (sort keys %$estructura) {
             next if scalar grep {$tag eq $_} @$tag_asignados;
             my $posibles = $estructura->{$tag}->{posibles_puntos};
             push @{$posibles_tags}, $tag if scalar grep {$_ == $puntos_a_asignar} @$posibles;

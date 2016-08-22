@@ -1,6 +1,7 @@
 package Universo::ModernTimes;
 use base 'Universo';
 use Universo::ModernTimes::PersonajeBuilder;
+use Universo::ModernTimes::EventoBuilder;
 use Data::Dumper;
 use JSON;
 use List::Util qw(shuffle);
@@ -34,11 +35,40 @@ use List::MoreUtils qw(zip);
         push @{$self->{_atributos}}, map { {nombre => $_, validos => [0..5], tags => [$_, qw(ability, skill)]} } qw(animal_ken crafts drive etiquette firearms melee performance security stealth survival);
         push @{$self->{_atributos}}, map { {nombre => $_, validos => [0..5], tags => [$_, qw(ability, knowledge)]} } qw(academics bureaucracy computer finance investigation law linguistics medicine occult politics research science);
         push @{$self->{_atributos}}, map { {nombre => $_, validos => [0..5], tags => [$_, qw(background)]} } qw(allies contacts fame influence mentor resources status);
-        $self->builder(Universo::ModernTimes::PersonajeBuilder->new);
         $Moore::logger->trace("Se cargaron los atributo: ", join(',',map {$_->{nombre}} @{$self->{_atributos}}));
+        $self->personaje_builder(Universo::ModernTimes::PersonajeBuilder->new);
+        push @{$self->{_eventos}}, {
+                nombre => 'CHANTAJE',
+                tags => ['CHANTAJE'],
+                sujeto_ideal => {conviction => [3..5], courage => [3..5]},
+                objeto_ideal => {courage => [1..2]},
+                texto => "%s %s a %s",
+                verbo => 'chantajea'
+        };
+        $self->evento_builder(Universo::ModernTimes::EventoBuilder->new);
 	}
 
     sub descripcion {
+        my $self = shift;
+        my $obj = shift;
+        my $str = '';
+        if(ref($obj) eq 'Personaje') {
+                $str = $self->descripcion_personaje($obj);
+            } elsif (ref($obj) eq 'Evento') {
+                $str = $self->descripcion_evento($obj);
+            }
+        return $str;
+    }
+
+    sub descripcion_evento {
+        my $self = shift;
+        my $evento = shift;
+        my $str = '';
+        $str .= sprintf $evento->texto, $evento->sujeto->nombre, $evento->verbo, $evento->objeto->nombre;
+        return $str;        
+    }
+
+    sub descripcion_personaje {
         my $self = shift;
         my $personaje = shift;
         my $str = '';
@@ -123,8 +153,13 @@ use List::MoreUtils qw(zip);
         foreach my $key (keys %{$args}) {
           $obj->$key($args->{$key});
         }
-        $obj = $self->builder->build($obj);
-        $Moore::logger->info("Se creo a ", uc($obj->nombre), ": ", $obj->json);
+        if($class eq 'Personaje') {
+            $obj = $self->personaje_builder->build($obj);
+            $Moore::logger->info("Se creo a ", uc($obj->nombre), ": ", $obj->json);
+        } elsif ($class eq 'Evento') {
+            $obj = $self->evento_builder->build($obj,$args);
+            $Moore::logger->info("Se creo a ", uc($obj->nombre), ": ", $obj->json) if $obj;
+        }
 		return $obj;
 	}
 

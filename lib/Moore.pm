@@ -35,23 +35,4 @@ sub t {
     return $resultado;
 }
 
-sub mezclar {
-	my $class = shift;
-	my @orig = @_;
-	my @dest = ();
-	my $orig = $#orig;
-	$Data::Dumper::Maxdepth = 3;
-	push @dest, undef for (0..$orig);
-	while (1) {
-		print STDERR Dumper [$orig, [@orig],$i,[@dest]];
-		my $i = int(rand($orig));
-		my $item = shift @orig;
-		$dest[$i] = $item;
-		$dest = $#dest;
-		print STDERR Dumper [$orig, [@orig],$i,[@dest]];
-		next if $orig != $dest;
-		last;
-	}
-}
-
 1;

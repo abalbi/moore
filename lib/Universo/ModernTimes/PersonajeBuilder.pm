@@ -66,11 +66,57 @@ our $actual;
         my $puntos = shift;
 
         my $estructura = $self->estructura($categoria, $tags, $puntos);
-
+        $Moore::logger->debug( join (',', keys %$estructura) );
         foreach my $tag (sort keys %$estructura) {
             $self->asignar_tag_random($estructura->{$tag}->{puntos_asignados}, $tag);
         }
     }
+
+    sub asignar_tag_random {
+        my $self = shift;
+        my $puntos = shift;
+        my $tag = shift;
+        my $filtrados = [];
+        my $atributos = Universo->actual->atributo($tag);
+        $self->filtrados_y_defaults($atributos,$filtrados);
+        $self->asignar_puntos_random($atributos,$puntos,$filtrados);    
+    }
+
+    sub filtrados_y_defaults {
+        my $self = shift;
+        my $atributos = shift;
+        my $filtrados = shift;
+        foreach my $atributo (@{$atributos}) {
+            my $nombre = $atributo->{nombre};
+            if(defined $self->personaje->$nombre) {
+                push @{$filtrados}, $atributo->{nombre};
+                $Moore::logger->trace("Se filtra el atributo ", $nombre, " para el personaje ", $self->personaje->nombre, " por que tiene el valor fijado en ",$self->personaje->$nombre);
+            }
+            if($atributo->{validos}->[0]) {
+                $self->personaje->$nombre($atributo->{validos}->[0]) if !$self->personaje->$nombre;
+            }
+        }
+
+    }
+
+    sub asignar_puntos_random {
+        my $self = shift;
+        my $atributos = shift;
+        my $puntos = shift;
+        my $filtrados = shift;
+        while (1) {
+            my $atributo = $atributos->[int rand scalar @$atributos];
+            my $nombre = $atributo->{nombre};
+            next if grep {$_ eq $nombre} @{$filtrados};
+            my $valor = $self->personaje->$nombre;
+            $valor++;
+            next if !grep {$_ == $valor} @{$atributo->{validos}};
+            $self->personaje->$nombre($valor);
+            my $sum = $self->personaje->sum($atributos);
+            last if $sum == $puntos;
+        }
+    }
+
 
     sub estructura {
         my $self = shift;
@@ -100,8 +146,7 @@ our $actual;
             my $c = 0;
             while(1) {
                 $c++;
-                $puntos_tmp = [shuffle(@{$puntos_tmp})];
-                my $puntos_a_asignar = $puntos_tmp->[0];
+                my $puntos_a_asignar = $puntos_tmp->[int rand scalar @$puntos_tmp];
                 last if !$puntos_a_asignar;
                 die "Se corto el ciclo por demasiadas iteraciones. " if $c == 15;
                 my $boo = 0;
@@ -152,52 +197,6 @@ our $actual;
             $Moore::logger->error($msg);
             die $msg;
         }
-    }
-
-    sub asignar_tag_random {
-        my $self = shift;
-        my $puntos = shift;
-        my $tag = shift;
-        my $filtrados = [];
-        my $atributos = Universo->actual->atributo($tag);
-        $self->filtrados_y_defaults($atributos,$filtrados);
-        $self->asignar_puntos_random($atributos,$puntos,$filtrados);    
-    }
-
-    sub asignar_puntos_random {
-        my $self = shift;
-        my $atributos = shift;
-        my $puntos = shift;
-        my $filtrados = shift;
-        while (1) {
-            $atributos = [Moore->mezclar(@{$atributos})];
-            my $atributo = $atributos->[0];
-            my $nombre = $atributo->{nombre};
-            next if grep {$_ eq $nombre} @{$filtrados};
-            my $valor = $self->personaje->$nombre;
-            $valor++;
-            next if !grep {$_ == $valor} @{$atributo->{validos}};
-            $self->personaje->$nombre($valor);
-            my $sum = $self->personaje->sum($atributos);
-            last if $sum == $puntos;
-        }
-    }
-
-    sub filtrados_y_defaults {
-        my $self = shift;
-        my $atributos = shift;
-        my $filtrados = shift;
-        foreach my $atributo (@{$atributos}) {
-            my $nombre = $atributo->{nombre};
-            if(defined $self->personaje->$nombre) {
-                push @{$filtrados}, $atributo->{nombre};
-                $Moore::logger->trace("Se filtra el atributo ", $nombre, " para el personaje ", $self->personaje->nombre, " por que tiene el valor fijado en ",$self->personaje->$nombre);
-            }
-            if($atributo->{validos}->[0]) {
-                $self->personaje->$nombre($atributo->{validos}->[0]) if !$self->personaje->$nombre;
-            }
-        }
-
     }
 
     sub personaje {

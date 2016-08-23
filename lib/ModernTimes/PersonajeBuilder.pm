@@ -52,7 +52,7 @@ our $actual;
         if($self->personaje->sexo eq 'f') {
                 $nombres = [qw(Lucia Maria Martina Paula Daniela Sofia Valeria Carla Sara Alba Julia Noa Emma Claudia Carmen Marta Valentina Irene Adriana Ana Laura Elena Alejandra Ines Marina Vera Candela Laia Ariadna Lola Andrea Rocio Angela Vega Nora Jimena Blanca Alicia Clara Olivia Celia Alma Eva Elsa Leyre Natalia Victoria Isabel Cristina Lara Abril Triana Nuria Aroa Carolina Aina Manuela Chloe Mia Mar Gabriela Mara Africa Iria Naia Helena Paola Noelia Nahia Miriam Salma)]
         } else {
-                $nombres = [qw(Hugo Daniel Pablo Alejandro Alvaro Adrian David Martin Mario Diego Javier Manuel Lucas Nicolas Marcos Leo Sergio Mateo Izan Alex Iker Marc Jorge Carlos Miguel Antonio Angel Gonzalo Juan Ivan Eric Ruben Samuel Hector Victor Enzo Jose Gabriel Bruno Dario Raul Adam Guillermo Francisco Aaron Jesus Oliver Joel Aitor Pedro Rodrigo Erik Marco Alberto Pau Jaime Asier Luis Rafael Unai Mohamed Dylan Marti Ian Pol Ismael Oscar Andres Alonso Biel Rayan Jan Fernando Thiago Arnau Cristian Gael Ignacio Joan)]
+                $nombres = [qw(Hugo Daniel Pablo Alejandro Alvaro Adrian David Martin Mario Diego Javier Manuel Lucas Nicolas Marcos Leo Sergio Mateo Izan Alex Iker Marc Jorge Carlos Miguel Antonio Angel Gonzalo Juan Ivan Eric Ruben Samuel Hector Victor Enzo Jose Gabriel Bruno Dario Raul Adam Guillermo Francisco Aaron Jesus Oliver Joel Aitor Pedro Rodrigo Erik Marco Alberto Pau Jaime Asier Luis Rafael Mohamed Dylan Marti Ian Pol Ismael Oscar Andres Alonso Biel Rayan Jan Fernando Thiago Arnau Cristian Gael Ignacio Joan)]
         }
         my $nombre = $nombres->[int(rand(@{$nombres}))];
         $self->personaje->nombre($nombre);
@@ -87,14 +87,18 @@ our $actual;
         foreach my $atributo (@{$atributos}) {
             my $nombre = $atributo->nombre;
             if(defined $self->personaje->$nombre) {
+                if(ref $self->personaje->$nombre eq 'ARRAY') {
+                    my $rango = $self->personaje->$nombre;
+                    $self->personaje->$nombre($rango->[0]);
+                }
                 push @{$filtrados}, $atributo->nombre;
                 $Moore::logger->trace(
-                  "Se filtra el atributo ",
+                  $self->personaje->nombre ? $self->personaje->nombre : 'NONAME',
+                  " ya tiene ",
                   $nombre,
-                  " para el personaje ",
-                  $self->personaje->nombre ? $self->personaje->nombre : 'NONAME',
-                  " por que tiene el valor fijado en ", 
-                  $self->personaje->nombre ? $self->personaje->nombre : 'NONAME',
+                  "(",
+                  $self->personaje->$nombre ? $self->personaje->$nombre : 'NONAME',
+                  ") y no se filtra de la creacion", 
                 );
             }
             if($atributo->validos->[0]) {

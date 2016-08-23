@@ -21,3 +21,13 @@ my $universo = ModernTimes->new;
 	isa_ok $evento, 'Evento', $evento->descripcion;
 }
 
+{
+	my $personaje1 = $universo->fabricar('Personaje',{courage=>3});
+	my $evento = $universo->fabricar('Evento', {sujeto => $personaje1});
+	isa_ok $evento, 'Evento', $evento->descripcion;
+}
+
+{
+	my $evento = $universo->fabricar('Evento');
+	isa_ok $evento, 'Evento', $evento->descripcion;
+}

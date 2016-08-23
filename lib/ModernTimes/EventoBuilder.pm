@@ -17,27 +17,38 @@ our $actual;
         my $evento = shift;
         my $tipo = Universo::actual->evento('CHANTAJE');
         $evento->tipo($tipo);
-        my $boo = 1;
-        foreach my $key (keys %{$evento->tipo->{sujeto_ideal}}) {
-            my $rango = $evento->tipo->{sujeto_ideal}->{$key};
-            if(scalar grep {$evento->sujeto->$key == $_} @$rango) {
-                $Moore::logger->trace($evento->sujeto->nombre, ' tiene el ', $key ,' suficiente para ser sujeto ',$evento->tipo->{nombre});
+        my @validaciones = ();
+        if(!$evento->sujeto) {
+            $Moore::logger->trace('El evento ', $evento->nombre, ' genera automaticamente un personaje');
+            my $sujeto = Universo::actual->fabricar('Personaje', $evento->tipo->{'sujeto'}) ;
+            $evento->sujeto($sujeto);
+        }
+        if(!$evento->objeto) {
+            $Moore::logger->trace('El evento ', $evento->nombre, ' genera automaticamente un personaje');
+            my $objeto = Universo::actual->fabricar('Personaje', $evento->tipo->{'objeto'}) ;
+            $evento->objeto($objeto);
+        }
+        push @validaciones, $self->validar_rol($evento, 'sujeto');
+        push @validaciones, $self->validar_rol($evento, 'objeto');
+        return undef if scalar grep {$_ == 0} @validaciones;
+        return $evento;
+    }
+
+    sub validar_rol {
+        my $self = shift;
+        my $evento = shift;
+        my $rol = shift;
+        my $personaje = $evento->$rol;
+        foreach my $key (keys %{$evento->tipo->{$rol}}) {
+            my $rango = $evento->tipo->{$rol}->{$key};
+            if(scalar grep {$personaje->$key == $_} @$rango) {
+                $Moore::logger->trace($personaje->nombre, ' tiene ', $key ,' a ',$personaje->$key ,' y esta en el rango [', join(',',@$rango),'] del ', $rol, ' de un ',$evento->tipo->{nombre});
             } else {
-                $boo = 0;
-                $Moore::logger->trace($evento->sujeto->nombre, ' NO tiene el ', $key ,' suficiente para ser sujeto ',$evento->tipo->{nombre});
+                $Moore::logger->trace($personaje->nombre, ' tiene ', $key ,' a ',$personaje->$key ,' y NO esta en el rango [', join(',',@$rango),'] del ', $rol, ' de un ',$evento->tipo->{nombre});
+                return 0;
             }
         }
-        foreach my $key (keys %{$evento->tipo->{objeto_ideal}}) {
-            my $rango = $evento->tipo->{objeto_ideal}->{$key};
-            if(scalar grep {$evento->objeto->$key == $_} @$rango) {
-                $Moore::logger->trace($evento->objeto->nombre, ' tiene el ', $key ,' suficiente para ser objeto ',$evento->tipo->{nombre});
-            } else {
-                $boo = 0;
-                $Moore::logger->trace($evento->objeto->nombre, ' NO tiene el ', $key ,' suficiente para ser objeto ',$evento->tipo->{nombre});
-            }
-        }
-        return $evento if $boo;
-        return undef;
+        return 1
     }
 
     sub sujeto {

@@ -41,8 +41,8 @@ use List::MoreUtils qw(zip);
         push @{$self->{_eventos}}, {
                 nombre => 'CHANTAJE',
                 tags => ['CHANTAJE'],
-                sujeto_ideal => {conviction => [3..5], courage => [3..5]},
-                objeto_ideal => {courage => [1..2]},
+                sujeto => {conviction => [3..5], courage => [3..5]},
+                objeto => {courage => [1..2]},
                 texto => "%s %s a %s",
                 verbo => 'chantajea'
         };

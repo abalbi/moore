@@ -40,7 +40,7 @@ use fields qw(_nombre _validos _tags _descripciones);
         my $self = shift;
         my $value = shift;
         $self->{_tags} = $value if defined $value;
-        return $self->{_tags};
+        return [@{$self->{_tags}},$self->nombre];
     }
 
     sub descripciones {

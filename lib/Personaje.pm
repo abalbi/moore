@@ -54,12 +54,21 @@ use fields qw(_atributo);
     		}
     		foreach my $key (keys %{$valores}) {
     			my $valor = $valores->{$key};
-            	$self->{_atributo}->{$key} = $valor;
-            	$Moore::logger->trace(sprintf("$nombre: Se asigno %s al atributo %s para %s", $valor, $key, $self->nombre ? $self->nombre : 'NONAME'));
+                my $atributo = Universo->actual->atributo($key);
+                my $valido = 1;
+                if (!ref $valor && defined $atributo->validos && !scalar(grep {$valor == $_} @{$atributo->validos})) {
+                    $valido = 0;
+                    $Moore::logger->warn($self->nombre || 'NONAME', ': No se asigno ', $valor,' al atributo ',$key,' por estar fuera de rango [', join(',', @{$atributo->validos}),']');
+                }
+                if ($valido) {
+                    $self->{_atributo}->{$key} = $valor;
+                    $Moore::logger->trace($self->nombre || 'NONAME', ': Se asigno ', $valor,' al atributo ',$key);
+                }
     		}
         }
         return $self->{_atributo}->{$nombre};
     }
+
 
 	sub json {
 		my $self = shift;

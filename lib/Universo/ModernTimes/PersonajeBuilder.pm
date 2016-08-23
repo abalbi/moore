@@ -85,9 +85,9 @@ our $actual;
         my $atributos = shift;
         my $filtrados = shift;
         foreach my $atributo (@{$atributos}) {
-            my $nombre = $atributo->{nombre};
+            my $nombre = $atributo->nombre;
             if(defined $self->personaje->$nombre) {
-                push @{$filtrados}, $atributo->{nombre};
+                push @{$filtrados}, $atributo->nombre;
                 $Moore::logger->trace(
                   "Se filtra el atributo ",
                   $nombre,
@@ -97,8 +97,8 @@ our $actual;
                   $self->personaje->nombre ? $self->personaje->nombre : 'NONAME',
                 );
             }
-            if($atributo->{validos}->[0]) {
-                $self->personaje->$nombre($atributo->{validos}->[0]) if !$self->personaje->$nombre;
+            if($atributo->validos->[0]) {
+                $self->personaje->$nombre($atributo->validos->[0]) if !$self->personaje->$nombre;
             }
         }
 
@@ -111,11 +111,11 @@ our $actual;
         my $filtrados = shift;
         while (1) {
             my $atributo = $atributos->[int rand scalar @$atributos];
-            my $nombre = $atributo->{nombre};
+            my $nombre = $atributo->nombre;
             next if grep {$_ eq $nombre} @{$filtrados};
             my $valor = $self->personaje->$nombre;
             $valor++;
-            next if !grep {$_ == $valor} @{$atributo->{validos}};
+            next if !grep {$_ == $valor} @{$atributo->validos};
             $self->personaje->$nombre($valor);
             my $sum = $self->personaje->sum($atributos);
             last if $sum == $puntos;
@@ -175,11 +175,11 @@ our $actual;
         $estructura->{$tag}->{tag} = $tag;
         $estructura->{$tag}->{atributos} = Universo->actual->atributo($tag);
         foreach my $atributo (@{$estructura->{$tag}->{atributos}}) {
-            my $nombre = $atributo->{nombre};
+            my $nombre = $atributo->nombre;
             if($self->personaje->$nombre) {
                 $min += $self->personaje->$nombre;
             } else {
-                $min += $atributo->{validos}->[0];
+                $min += $atributo->validos->[0];
             }
         }
         $estructura->{$tag}->{min} = $min;

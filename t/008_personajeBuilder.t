@@ -53,9 +53,9 @@ my $universo = Universo::ModernTimes->new;
 	is $estructura->{social}->{posibles_puntos}->[0], 10; 
 	is $estructura->{social}->{posibles_puntos}->[1], 8;
 	is $estructura->{social}->{posibles_puntos}->[2], 6;
-	is $estructura->{social}->{atributos}->[0]->{nombre}, 'manipulation';
-	is $estructura->{social}->{atributos}->[1]->{nombre}, 'appearance';
-	is $estructura->{social}->{atributos}->[2]->{nombre}, 'charisma';
+	is $estructura->{social}->{atributos}->[0]->nombre, 'manipulation';
+	is $estructura->{social}->{atributos}->[1]->nombre, 'appearance';
+	is $estructura->{social}->{atributos}->[2]->nombre, 'charisma';
 
 	$builder->estructura_validar($estructura,[10,8,6]);
 
@@ -64,9 +64,9 @@ my $universo = Universo::ModernTimes->new;
 	is $estructura->{social}->{posibles_puntos}->[0], 10; 
 	is $estructura->{social}->{posibles_puntos}->[1], 8;
 	is $estructura->{social}->{posibles_puntos}->[2], 6;
-	is $estructura->{social}->{atributos}->[0]->{nombre}, 'manipulation';
-	is $estructura->{social}->{atributos}->[1]->{nombre}, 'appearance';
-	is $estructura->{social}->{atributos}->[2]->{nombre}, 'charisma';
+	is $estructura->{social}->{atributos}->[0]->nombre, 'manipulation';
+	is $estructura->{social}->{atributos}->[1]->nombre, 'appearance';
+	is $estructura->{social}->{atributos}->[2]->nombre, 'charisma';
 
 	$builder->estructura_puntos_asignados($estructura,[10,8,6]);
 
@@ -75,9 +75,9 @@ my $universo = Universo::ModernTimes->new;
 	is $estructura->{social}->{posibles_puntos}->[0], 10; 
 	is $estructura->{social}->{posibles_puntos}->[1], 8;
 	is $estructura->{social}->{posibles_puntos}->[2], 6;
-	is $estructura->{social}->{atributos}->[0]->{nombre}, 'manipulation';
-	is $estructura->{social}->{atributos}->[1]->{nombre}, 'appearance';
-	is $estructura->{social}->{atributos}->[2]->{nombre}, 'charisma';
+	is $estructura->{social}->{atributos}->[0]->nombre, 'manipulation';
+	is $estructura->{social}->{atributos}->[1]->nombre, 'appearance';
+	is $estructura->{social}->{atributos}->[2]->nombre, 'charisma';
 
 	is $estructura->{physical}->{puntos_asignados}, 8; 
 	is $estructura->{social}->{puntos_asignados}, 10; 

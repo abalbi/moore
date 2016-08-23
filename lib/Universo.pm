@@ -45,7 +45,7 @@ our $actual;
 		my $tag = shift;
 		my $arr = [];
 		foreach my $atributo (@{$self->{_atributos}}) {
-			push @$arr, $atributo if grep {$_ eq $tag} @{$atributo->{tags}};
+			push @$arr, $atributo if grep {$_ eq $tag} @{$atributo->tags};
 		}
 		return $arr->[0] if scalar(@$arr) == 1;
 		return $arr;

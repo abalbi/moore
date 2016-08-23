@@ -14,7 +14,7 @@ use fields qw(_atributo);
 	    my $method = $AUTOLOAD;
 	    my $self = shift;
 	    $method =~ s/.*:://;
-	    my $atributo = $method if grep {$_->{nombre} eq $method} @{Universo->actual->atributos};
+	    my $atributo = $method if grep {$_->nombre eq $method} @{Universo->actual->atributos};
 	    if($atributo) {
             return $self->atributo($atributo,@_);
 	    }
@@ -28,8 +28,8 @@ use fields qw(_atributo);
         foreach my $atributo (@{$atributos}) {
             my $nombre;
             $nombre = $atributo if !ref($atributo);
-            $nombre = $atributo->{nombre} if ref($atributo) eq 'HASH';
-            $sum += $self->$nombre();
+            $nombre = $atributo->nombre if $atributo->isa('Universo::Atributo');
+            $sum += $self->$nombre;
         }
         return $sum;
     }

@@ -3,6 +3,7 @@ use base 'Universo';
 use ModernTimes::PersonajeBuilder;
 use ModernTimes::EventoBuilder;
 use ModernTimes::Atributo;
+use ModernTimes::Evento;
 use Data::Dumper;
 use JSON;
 use List::Util qw(shuffle);
@@ -38,14 +39,14 @@ use List::MoreUtils qw(zip);
         push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [0..5], tags => [$_, qw(background)]}) } qw(allies contacts fame influence mentor resources status);
         $Moore::logger->trace("Se cargaron los atributo: ", join(',',map {$_->nombre} @{$self->{_atributos}}));
         $self->personaje_builder(ModernTimes::PersonajeBuilder->new);
-        push @{$self->{_eventos}}, {
+        push @{$self->{_eventos}}, ModernTimes::Evento->hacer({
                 nombre => 'CHANTAJE',
                 tags => ['CHANTAJE'],
                 sujeto => {conviction => [3..5], courage => [3..5]},
                 objeto => {courage => [1..2]},
                 texto => "%s %s a %s",
                 verbo => 'chantajea'
-        };
+        });
         $self->evento_builder(ModernTimes::EventoBuilder->new);
 	}
 

@@ -34,17 +34,17 @@ use fields qw(_sujeto _objeto _tipo);
 
     sub nombre {
         my $self = shift;
-        return $self->tipo->{nombre};
+        return $self->tipo->nombre;
     }
 
     sub texto {
         my $self = shift;
-        return $self->tipo->{texto};
+        return $self->tipo->texto;
     }
 
     sub verbo {
         my $self = shift;
-        return $self->tipo->{verbo};
+        return $self->tipo->verbo;
     }
 
 
@@ -53,6 +53,7 @@ use fields qw(_sujeto _objeto _tipo);
         my $hash = {%{$self}};
         $hash->{_sujeto} = $self->sujeto->nombre;   
         $hash->{_objeto} = $self->objeto->nombre;
+        $hash->{_tipo} = $self->tipo->nombre;
         return JSON::encode_json($hash);
     }
 

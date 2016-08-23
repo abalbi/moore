@@ -56,7 +56,7 @@ our $actual;
 		my $tag = shift;
 		my $arr = [];
 		foreach my $evento (@{$self->{_eventos}}) {
-			push @$arr, $evento if grep {$_ eq $tag} @{$evento->{tags}};
+			push @$arr, $evento if grep {$_ eq $tag} @{$evento->tags};
 		}
 		return $arr->[0] if scalar(@$arr) == 1;
 		return $arr;

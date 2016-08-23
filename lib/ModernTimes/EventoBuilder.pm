@@ -1,4 +1,4 @@
-package Universo::ModernTimes::EventoBuilder;
+package ModernTimes::EventoBuilder;
 use strict;
 use Data::Dumper;
 use fields qw(_sujeto);

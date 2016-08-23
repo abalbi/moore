@@ -4,7 +4,7 @@ use Test::More qw(no_plan);
 use lib 'lib';
 use Moore;
 
-my $universo = Universo::ModernTimes->new;
+my $universo = ModernTimes->new;
 
 {
 	my $personaje1 = $universo->fabricar('Personaje',{courage=>1});

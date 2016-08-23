@@ -12,12 +12,12 @@ require_ok( 'Universo' );
 
 isa_ok(new Universo(), 'Universo');
 
-my $universo = new Universo::ModernTimes;
+my $universo = new ModernTimes;
 
 isa_ok($universo, 'Universo');
-isa_ok($universo, 'Universo::ModernTimes');
+isa_ok($universo, 'ModernTimes');
 
 
-isa_ok (Universo::actual(), 'Universo::ModernTimes');
-isa_ok (Universo->actual, 'Universo::ModernTimes');
-isa_ok ($Universo::actual, 'Universo::ModernTimes');
+isa_ok (Universo::actual(), 'ModernTimes');
+isa_ok (Universo->actual, 'ModernTimes');
+isa_ok ($Universo::actual, 'ModernTimes');

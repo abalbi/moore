@@ -14,7 +14,7 @@ use Entorno;
 use Personaje;
 use Evento;
 use Universo;
-use Universo::ModernTimes;
+use ModernTimes;
 
 
 sub runner {

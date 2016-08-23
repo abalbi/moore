@@ -5,10 +5,10 @@ use lib 'lib';
 use Moore;
 use Data::Dumper;
 
-my $universo = Universo::ModernTimes->new;
+my $universo = ModernTimes->new;
 
 {
-	my $builder = Universo::ModernTimes::PersonajeBuilder->new;
+	my $builder = ModernTimes::PersonajeBuilder->new;
 	my $personaje = Personaje->new;
 	$builder->personaje($personaje);
 
@@ -22,7 +22,7 @@ my $universo = Universo::ModernTimes->new;
 }
 
 {
-	my $builder = Universo::ModernTimes::PersonajeBuilder->new;
+	my $builder = ModernTimes::PersonajeBuilder->new;
 	my $personaje = Personaje->new;
 	$personaje->appearance(4);
 	$builder->personaje($personaje);
@@ -40,7 +40,7 @@ my $universo = Universo::ModernTimes->new;
 
 
 {
-	my $builder = Universo::ModernTimes::PersonajeBuilder->new;
+	my $builder = ModernTimes::PersonajeBuilder->new;
 	my $personaje = Personaje->new;
 	$builder->personaje($personaje);
 	my $estructura = {};

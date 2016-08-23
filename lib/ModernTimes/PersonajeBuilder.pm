@@ -1,4 +1,4 @@
-package Universo::ModernTimes::PersonajeBuilder;
+package ModernTimes::PersonajeBuilder;
 use strict;
 use Data::Dumper;
 use fields qw(_personaje);

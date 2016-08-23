@@ -4,7 +4,7 @@ use Test::More qw(no_plan);
 use lib 'lib';
 use Moore;
 
-Universo::ModernTimes->new;
+ModernTimes->new;
 my $personaje = $Universo::actual->fabricar('Personaje');
 
 Entorno->instancia->agregar($personaje);

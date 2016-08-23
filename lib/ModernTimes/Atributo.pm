@@ -1,4 +1,4 @@
-package Universo::ModernTimes::Atributo;
+package ModernTimes::Atributo;
 use JSON;
 use Data::Dumper;
 use base 'Universo::Atributo';

@@ -28,6 +28,7 @@ our $instancia;
 			$self->personajes->{$item->nombre} = $item;
 			$Moore::logger->trace('Se agrego a ', $item->json);
 		}
+		return $item;
 	}
 
 	sub personajes {

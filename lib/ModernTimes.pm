@@ -30,13 +30,13 @@ use List::MoreUtils qw(zip);
 
             }) 
         } qw(conviction instinct courage);
-        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [1..5], tags => [$_, qw(attribute, physical)]}) } qw(strengh dexterity stamina);
-        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [1..5], tags => [$_, qw(attribute, social)]}) } qw(manipulation appearance charisma);
-        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [1..5], tags => [$_, qw(attribute, mental)]}) } qw(intelligence perception wits);
-        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [0..5], tags => [$_, qw(ability, talent)]}) } qw(athletics brawl dodge empathy expression intimidation leadership streetwise subterfuge);
-        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [0..5], tags => [$_, qw(ability, skill)]}) } qw(animal_ken crafts drive etiquette firearms melee performance security stealth survival);
-        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [0..5], tags => [$_, qw(ability, knowledge)]}) } qw(academics bureaucracy computer finance investigation law linguistics medicine occult politics research science);
-        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [0..5], tags => [$_, qw(background)]}) } qw(allies contacts fame influence mentor resources status);
+        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [1..5], tags => [qw(attribute, physical)]}) } qw(strengh dexterity stamina);
+        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [1..5], tags => [qw(attribute, social)]}) } qw(manipulation appearance charisma);
+        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [1..5], tags => [qw(attribute, mental)]}) } qw(intelligence perception wits);
+        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [0..5], tags => [qw(ability, talent)]}) } qw(athletics brawl dodge empathy expression intimidation leadership streetwise subterfuge);
+        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [0..5], tags => [qw(ability, skill)]}) } qw(animal_ken crafts drive etiquette firearms melee performance security stealth survival);
+        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [0..5], tags => [qw(ability, knowledge)]}) } qw(academics bureaucracy computer finance investigation law linguistics medicine occult politics research science);
+        push @{$self->{_atributos}}, map { ModernTimes::Atributo->hacer({nombre => $_, validos => [0..5], tags => [qw(background)]}) } qw(allies contacts fame influence mentor resources status);
         $Moore::logger->trace("Se cargaron los atributo: ", join(',',map {$_->nombre} @{$self->{_atributos}}));
         $self->personaje_builder(ModernTimes::PersonajeBuilder->new);
         push @{$self->{_eventos}}, ModernTimes::Evento->hacer({

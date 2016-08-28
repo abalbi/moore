@@ -40,9 +40,11 @@ our $actual;
         $hash->{color} = [qw(moroch[a|o] rubi[a|o] castañ[a|o] castañ[a|o] peliroj[a|o])];
         $hash->{largo} = [qw(corto en_melena largo)];
         $hash->{forma} = [qw(lacio ondulado enrulado)];
+        $hash->{altura} = [qw(muy_alt[a|o] alt[a|o] normal baj[a|o] petiz[a|o])];
         $self->personaje->pelo_color($hash->{color}->[int rand scalar @{$hash->{color}}]) if !$self->personaje->pelo_color;
         $self->personaje->pelo_largo($hash->{largo}->[int rand scalar @{$hash->{largo}}]) if !$self->personaje->pelo_largo;
         $self->personaje->pelo_forma($hash->{forma}->[int rand scalar @{$hash->{forma}}]) if !$self->personaje->pelo_forma;
+        $self->personaje->altura($hash->{altura}->[int rand scalar @{$hash->{altura}}]) if !$self->personaje->altura;
     }
 
     sub asignar_nombre {

@@ -4,6 +4,7 @@ use ModernTimes::PersonajeBuilder;
 use ModernTimes::EventoBuilder;
 use ModernTimes::Atributo;
 use ModernTimes::Evento;
+use ModernTimes::Roll;
 use Data::Dumper;
 use JSON;
 use List::Util qw(shuffle);
@@ -18,6 +19,7 @@ use List::MoreUtils qw(zip);
         push @{$self->{_atributos}}, ModernTimes::Atributo->hacer({ nombre => 'pelo_color'   });
         push @{$self->{_atributos}}, ModernTimes::Atributo->hacer({ nombre => 'pelo_largo'   });
         push @{$self->{_atributos}}, ModernTimes::Atributo->hacer({ nombre => 'pelo_forma'   });
+        push @{$self->{_atributos}}, ModernTimes::Atributo->hacer({ nombre => 'altura'   });
         push @{$self->{_atributos}}, map { 
             ModernTimes::Atributo->hacer({
                 nombre => $_,
@@ -164,5 +166,13 @@ use List::MoreUtils qw(zip);
         }
 		return $obj;
 	}
+
+    sub roll {
+        my $roll = shift;
+        my $roll = ModernTimes::Roll->new($roll);
+        $roll->roll;
+        return $roll;
+    }
+
 
 1;

@@ -21,6 +21,12 @@ use fields qw(_atributo);
 	    die "No existe el metodo o atributo '$method'";
     }
 
+    sub t {
+        my $self = shift;
+        my $str = shift;
+        return Moore->t($self, $str);        
+    }
+
     sub sum {
         my $self = shift;
         my $atributos = shift;

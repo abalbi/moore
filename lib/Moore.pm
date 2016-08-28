@@ -38,8 +38,10 @@ sub runner {
     if($personaje) {
         foreach (1..$personaje) {
             my $per = Entorno->instancia->agregar($Universo::actual->fabricar('Personaje'));
-            print $per->descripcion."\n";
         }
+    }
+    foreach my $per (values %{Entorno->instancia->personajes}) {
+        print $per->descripcion."\n";
     }
 }
 
